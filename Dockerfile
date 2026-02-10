@@ -1,14 +1,13 @@
-# Use an official OpenJDK runtime as a parent image
-FROM eclipse-temurin:21-jdk-alpine
-
-# Set the working directory to /app
+# Build Stage
+FROM maven:3.9-eclipse-temurin-21-alpine AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Copy the executable jar file to the container
-COPY target/*.jar app.jar
-
-# Make port 8081 available to the world outside this container
+# Run Stage
+FROM eclipse-temurin:21-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8081
-
-# Run the jar file
 ENTRYPOINT ["java", "-jar", "app.jar"]
