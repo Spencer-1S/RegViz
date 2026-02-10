@@ -19,6 +19,9 @@ target/
 *.iml
 *.ipr
 
+**/node_modules/
+frontend/dist/
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
