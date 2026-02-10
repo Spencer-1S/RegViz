@@ -14,13 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://localhost:5173")
 public class DfaController {
 
     private final RegexToDfaService regexToDfaService;
 
     public DfaController(RegexToDfaService regexToDfaService) {
         this.regexToDfaService = regexToDfaService;
+    }
+
+    @GetMapping("/")
+    public String healthCheck() {
+        return "RegViz API is running!";
     }
 
     @PostMapping(path = "/dfa", consumes = MediaType.APPLICATION_JSON_VALUE)
