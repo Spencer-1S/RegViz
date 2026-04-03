@@ -1,73 +1,159 @@
 # RegViz
 
-### [🔗 Live Demo](https://Spencer-1S.github.io/RegViz/)
+RegViz is a full-stack web application that converts regular expressions into deterministic finite automata (DFA) and visualizes the result as a Graphviz diagram.
 
-**RegViz** is a clean, modern tool to visualize Regular Expressions as Deterministic Finite Automata (DFA). It bridges the gap between abstract regex patterns and their underlying state-machine logic, making it perfect for students and developers.
+Live Demo: [https://Spencer-1S.github.io/RegViz/](https://Spencer-1S.github.io/RegViz/)
 
-## ✨ Features
+## Overview
 
-- **Instant Conversion**: Type a regex, get a DFA.
-- **Clean Visualization**: Uses Graphviz (WebAssembly) to generate professional, textbook-quality diagrams.
-- **Modern UI**: Built with React and Tailwind CSS for a responsive, dark-themed interface.
-- **Robust Engine**: Powered by the industrial-strength `dk.brics.automaton` Java library.
+RegViz is designed for students, educators, and developers who want to understand how regex patterns map to finite-state machines. The application accepts a supported regular expression, builds an automaton on the backend, and renders a clean DFA diagram in the browser.
 
-## 🛠️ Tech Stack
+## Key Features
 
-| Component | Technology |
-|-----------|------------|
-| **Frontend** | React, Vite, Tailwind CSS |
-| **Viz Library** | @viz-js/viz (Graphviz WASM) |
-| **Backend** | Java 21, Spring Boot 3 |
-| **Logic** | dk.brics.automaton |
-| **Hosting** | GitHub Pages (Frontend) + Render (Backend) |
+- Convert regex input into DFA states and transitions
+- Render DFA diagrams using Graphviz (WASM) in the frontend
+- Return both structured DFA data and DOT output from the API
+- Support optional DFA minimization
+- Provide validation feedback for unsupported or invalid patterns
 
-## 🚀 Deployment Info
+## Technology Stack
 
-The project uses a split-hosting architecture:
+| Layer            | Technology                                |
+|------------------|-------------------------------------------|
+| Frontend         | React (Vite), Tailwind CSS                |
+| Visualization    | `@viz-js/viz` (Graphviz WebAssembly)      |
+| Backend          | Spring Boot 3, Java 21                    |
+| Automaton Engine | `dk.brics.automaton`                      |
+| Hosting          | GitHub Pages (frontend), Render (backend) |
 
-1.  **Frontend**: Deployed as a static site on **GitHub Pages**.
-2.  **Backend**: Containerized with Docker and hosted on **Render**.
+## System Architecture
 
-> **Note**: The backend is hosted on a free tier service. If you are the first person visiting in a while, it may take **1-2 minutes** to wake up. Please be patient!
+- `frontend/` contains the React UI and diagram rendering logic.
+- `src/main/java/` contains REST API endpoints, validation, and regex-to-DFA conversion.
+- The frontend calls the backend endpoint `POST /api/dfa`.
+- The backend returns DFA metadata (states, transitions, accept states) and DOT graph content.
 
-## 💻 Local Development
+## Project Structure
 
-Follow these steps to run RegViz on your own machine.
+```text
+regextodfa/
+  frontend/                      # React application
+    src/
+      api/client.js              # Axios client with VITE_API_BASE support
+      components/                # Form, diagram, summary UI
+  src/main/java/com/spencer/regextodfa/
+    controller/DfaController.java
+    service/RegexToDfaService.java
+    model/                       # Request/response and graph models
+```
+
+## Local Development
 
 ### Prerequisites
-*   Java 21 or higher
-*   Node.js 18 or higher
 
-### 1. Start the Backend
-The Spring Boot server handles the heavy lifting of calculating the DFA.
+- Java 21 or later
+- Node.js 18 or later
+- npm
+
+### 1) Start the Backend (Spring Boot)
+
+From the project root:
 
 ```bash
-# From the root directory
+# macOS/Linux
 ./mvnw spring-boot:run
-```
-*Port: 8081*
 
-### 2. Start the Frontend
-The React application communicates with the local backend.
+# Windows (PowerShell)
+.\mvnw.cmd spring-boot:run
+```
+
+Backend default URL: `http://localhost:8081`
+
+### 2) Start the Frontend (React)
+
+In a new terminal:
 
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
 ```
-*Client: http://localhost:5173*
 
-## 📝 Supported Regex Syntax
-RegViz supports standard regular expression operations:
-*   **Basics**: `abc`, `( )`
-*   **Quantifiers**: `*`, `+`, `?`, `{n,m}`
-*   **Alternation**: `|` (OR)
-*   **Character Classes**: `[a-z]`, `[0-9]`
-*   **Epsilon**: Use empty parentheses `()` to denote the empty string.
+Frontend default URL: `http://localhost:5173`
 
----
-*Created by [Spencer-1S](https://github.com/Spencer-1S)*
+## Frontend API Configuration
+
+The frontend Axios client reads `VITE_API_BASE` and builds the API URL as:
+
+- `${VITE_API_BASE}/api` when `VITE_API_BASE` is set
+- `/api` when `VITE_API_BASE` is not set (uses Vite proxy in local development)
+
+Example `.env` (inside `frontend/`):
+
+```bash
+VITE_API_BASE=https://regviz.onrender.com
+```
+
+## API Reference
+
+### Health Check
+
+- `GET /api/`
+- Response: `RegViz API is running!`
+
+### Build DFA
+
+- `POST /api/dfa`
+- Content-Type: `application/json`
+
+Request body:
+
+```json
+{
+  "regex": "a*(ab|c)",
+  "alphabet": null,
+  "minimize": true
+}
+```
+
+Main response fields:
+
+- `regex`, `alphabet`
+- `startState`, `acceptStates`, `states`
+- `transitions`, `nodes`, `edges`
+- `minimized`
+- `dot` (Graphviz DOT string)
+
+## Supported Regex Syntax
+
+RegViz supports the regex syntax handled by the current automaton engine implementation, including common constructs such as:
+
+- Grouping: `( )`
+- Alternation: `|`
+- Quantifiers: `*`, `+`, `?`, `{n,m}`
+- Character classes and ranges: `[a-z]`, `[0-9]`
+
+### Important Notes
+
+- This project does not aim to support every PCRE/JavaScript regex feature.
+- Anchors and advanced assertions may behave differently than full validation engines.
+- If an unsupported pattern is entered, the API returns a validation or processing error.
+
+## Deployment Notes
+
+- Frontend is deployed to GitHub Pages.
+- Backend is deployed on Render.
+- On Render free tier, the backend may take time to wake up after inactivity.
+
+## Contributing
+
+Contributions are welcome. To contribute:
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes with clear messages
+4. Open a pull request
+
+## Author
+
+Created and maintained by [Spencer-1S](https://github.com/Spencer-1S).
