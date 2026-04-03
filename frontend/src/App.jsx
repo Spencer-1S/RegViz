@@ -32,7 +32,9 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold">RegViz</h1>
-            <p className="text-sm text-slate-400">Developed by Spencer1s</p>
+            <p className="text-sm text-slate-400">Developed by
+              <a href="https://github.com/Spencer-1S" > <u>Spencer1s</u> </a>
+            </p>
           </div>
         </div>
       </header>
