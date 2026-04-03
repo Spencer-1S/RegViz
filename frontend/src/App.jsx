@@ -32,14 +32,14 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold">RegViz</h1>
-            <p className="text-sm text-slate-400">Graphviz + Spring Boot</p>
+            <p className="text-sm text-slate-400">Developed by Spencer1s</p>
           </div>
         </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
         <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl">
-          <h2 className="text-lg font-semibold mb-4">Convert a regular expression to DFA</h2>
+          <h2 className="text-lg font-semibold mb-4">Convert a regular expression to DFA diagram</h2>
           <RegexForm onSubmit={handleSubmit} onInteraction={() => setError('')} loading={loading} />
           <div className="mt-4">{loading ? <Loader /> : <ErrorAlert message={error} />}</div>
         </div>
