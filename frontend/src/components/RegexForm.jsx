@@ -57,7 +57,7 @@ export default function RegexForm({ onSubmit, onInteraction, loading }) {
           <span className="font-semibold text-slate-300">Examples:</span>{' '}
           <code className="bg-slate-800 px-1 py-0.5 rounded cursor-pointer hover:bg-slate-700" onClick={() => handleExampleClick('(a|b)*abb')}>(a|b)*abb</code>,{' '}
           <code className="bg-slate-800 px-1 py-0.5 rounded cursor-pointer hover:bg-slate-700" onClick={() => handleExampleClick('[0-9]+')}>[0-9]+</code>,{' '}
-          <code className="bg-slate-800 px-1 py-0.5 rounded cursor-pointer hover:bg-slate-700" onClick={() => handleExampleClick('a*bc*')}>a*bc*</code>,{' '}
+          <code className="bg-slate-800 px-1 py-0.5 rounded cursor-pointer hover:bg-slate-700" onClick={() => handleExampleClick('a*bc*')}>a*bc*</code>{' '}
           {/*<code className="bg-slate-800 px-1 py-0.5 rounded cursor-pointer hover:bg-slate-700" onClick={() => handleExampleClick('a&b')}>a&b</code> (intersection)*/}
         </div>
 
