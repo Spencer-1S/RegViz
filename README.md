@@ -157,3 +157,7 @@ Contributions are welcome. To contribute:
 ## Author
 
 Created and maintained by [Spencer-1S](https://github.com/Spencer-1S).
+
+## License
+
+This project is licensed under the **GNU General Public License v3.0**. See the `LICENSE` file for details.
